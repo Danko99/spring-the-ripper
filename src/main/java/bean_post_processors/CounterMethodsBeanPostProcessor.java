@@ -24,23 +24,20 @@ public class CounterMethodsBeanPostProcessor implements BeanPostProcessor {
         return bean;
     }
 
-
-    //Не заработало
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-//        Class beanClass = originalBeansMap.get(beanName);
-//        if(beanClass!=null){
-//            return Proxy.newProxyInstance(beanClass.getClassLoader(), beanClass.getInterfaces(), new InvocationHandler() {
-//                @Override
-//                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-//                    if (method.getName().equals("toString")) {
-//                        return new ObjectMapper().writeValueAsString(bean);
-//                    }
-//                    return method.invoke(bean,args);
-//                }
-//            });
-//        }
-//        return bean;
-return bean;
+        Class beanClass = originalBeansMap.get(beanName);
+        if(beanClass!=null){
+            return Proxy.newProxyInstance(beanClass.getClassLoader(), beanClass.getInterfaces(), new InvocationHandler() {
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    if (method.getName().equals("toString")) {
+                        return new ObjectMapper().writeValueAsString(bean);
+                    }
+                    return method.invoke(bean,args);
+                }
+            });
+        }
+        return bean;
     }
 }
